@@ -1,0 +1,83 @@
+---
+Parameters:
+  KeyName:
+    Type: String
+    Default: nikolas.lahtinen@grano.fi
+  PrivateSubnets:
+    Type: CommaDelimitedList
+    Default: subnet-ceb1e1aa,subnet-10d99166
+  PublicSubnets:
+    Type: CommaDelimitedList
+    Default: subnet-c9b1e1ad,subnet-11d99167
+  MinSize:
+    Type: Number
+    Default: 1
+  MaxSize:
+    Type: Number
+    Default: 2
+  VPC:
+    Type: String
+    Default: vpc-d01b60b4
+Resources:
+  ThumborLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      # AssociatePublicIpAddress: true
+      ImageId: ami-ad732dcb
+      InstanceType: t2.medium
+      KeyName:
+        Ref: KeyName
+      SecurityGroups:
+        - sg-62c87004 # Public API SG
+      IamInstanceProfile: arn:aws:iam::181696919365:instance-profile/ecommerceapirole
+      UserData:
+        "Fn::Base64":
+          !Sub |
+            #!/bin/bash -xe
+            /usr/local/bin/aws s3 cp s3://ecom-api-secrets/thumbor.conf /etc/thumbor.conf
+  ThumborASG:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      MinSize:
+        Ref: MinSize
+      MaxSize:
+        Ref: MaxSize
+      LaunchConfigurationName:
+        Ref: ThumborLaunchConfig
+      VPCZoneIdentifier:
+        Ref: PrivateSubnets
+      TargetGroupARNs:
+        - Ref: ALBTargetGroup
+  ALBListener:
+    Type : AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        -
+          Type: forward
+          TargetGroupArn:
+            Ref: ALBTargetGroup
+      LoadBalancerArn:
+        Ref: ApplicationLoadBalancer
+      Port: 80
+      Protocol: HTTP
+  ApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing
+      Subnets:
+        Ref: PublicSubnets
+      SecurityGroups:
+        - sg-64d66e02 # Public ELB Group
+  ALBTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      UnhealthyThresholdCount: 2
+      HealthyThresholdCount: 2
+      HealthCheckPath: /healthcheck
+      Port: 8888
+      Protocol: HTTP
+      VpcId:
+        Ref: VPC
