@@ -81,3 +81,26 @@ Resources:
       Protocol: HTTP
       VpcId:
         Ref: VPC
+  CDN:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - img.granoshop.fi
+        Enabled: yes
+        Origins:
+        - DomainName: !GetAtt ApplicationLoadBalancer.DNSName
+          Id: thumbor
+          CustomOriginConfig:
+            HTTPPort: '80'
+            HTTPSPort: '443'
+            OriginProtocolPolicy: http-only
+        DefaultCacheBehavior:
+          TargetOriginId: thumbor
+          DefaultTTL: 15552000
+          SmoothStreaming: 'false'
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: allow-all
