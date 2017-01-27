@@ -26,7 +26,8 @@ const options = {
 };
 const args = minimist(process.argv.slice(2), options);
 
-args.filtersCalls = args.filtersCalls.split(',');
+if(args.filtersCalls)
+  args.filtersCalls = args.filtersCalls.split(',');
 
 if (args.THUMBOR_SECURITY_KEY == null) {
   console.warn('Security key not defined! Use --key flag');
