@@ -50,6 +50,10 @@ Resources:
         Ref: PrivateSubnets
       TargetGroupARNs:
         - Ref: ALBTargetGroup
+      Tags:
+        - Key: Name
+          Value: thumbor
+          PropagateAtLaunch: true
   ALBListener:
     Type : AWS::ElasticLoadBalancingV2::Listener
     Properties:
