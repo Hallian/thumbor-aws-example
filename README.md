@@ -72,6 +72,19 @@ Replace `BUCKET` with the actual bucket that you got from the command above.
 Note the optional query parameter. This is for running a [JMESPath](http://jmespath.org) query against the returned JSON output.
 This can be used to implement very powerful things in scripts.
 
+With your `ThumborUrl` at hand you can try fetching our image from Thumbor.
+
+```
+http://PUT_THUMBOR_URL_HERE/unsafe/trump.jpg
+```
+
+Wow that's one big Trump! Let's make it a bit smaller.
+
+```
+http://PUT_THUMBOR_URL_HERE/unsafe/600x0/trump.jpg
+```
+
+Check network tab on devtools to see the difference in size.
 
 ## Acknowledgements
 
