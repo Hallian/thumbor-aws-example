@@ -19,8 +19,5 @@
 	}, {
 		"type": "shell",
 		"script": "provision_scripts/install-thumbor.sh"
-	}, {
-		"type": "shell",
-		"script": "provision_scripts/install-codedeploy-agent.sh"
 	}]
 }
