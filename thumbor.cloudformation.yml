@@ -3,12 +3,12 @@ Parameters:
   KeyName:
     Type: String
     Default: grano-ecomm
-  PrivateSubnets:
+  ThumborSubnets:
     Type: CommaDelimitedList
-    Default: subnet-ceb1e1aa,subnet-10d99166
-  PublicSubnets:
+    # Default: subnet-ceb1e1aa,subnet-10d99166
+  ALBSubnets:
     Type: CommaDelimitedList
-    Default: subnet-c9b1e1ad,subnet-11d99167
+    # Default: subnet-c9b1e1ad,subnet-11d99167
   MinSize:
     Type: Number
     Default: 1
@@ -17,24 +17,73 @@ Parameters:
     Default: 2
   VPC:
     Type: String
-    Default: vpc-d01b60b4
+    # Default: vpc-d01b60b4
+  AMIID:
+    Type: String
 Resources:
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId:
+        Ref: VPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '80'
+        ToPort: '80'
+        CidrIp: 0.0.0.0/0
+  ThumborSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId:
+        Ref: VPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '8888'
+        ToPort: '8888'
+        SourceSecurityGroupId:
+          Ref: ALBSecurityGroup
+  ImageBucket:
+    Type: "AWS::S3::Bucket"
+  ThumborRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      Policies:
+        -
+          PolicyName: "allow-image-bucket"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action: "s3:*"
+                Resource:
+                  !Sub |
+                    arn:aws:s3:::${ImageBucket}
+  ThumborInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Roles:
+        - Ref: ThumborRole
   ThumborLaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       # AssociatePublicIpAddress: true
-      ImageId: ami-ad732dcb
+      ImageId:
+        Ref: AMIID
       InstanceType: t2.medium
       KeyName:
         Ref: KeyName
       SecurityGroups:
-        - sg-62c87004 # Public API SG
-      IamInstanceProfile: arn:aws:iam::181696919365:instance-profile/ecommerceapirole
+        - Ref: ThumborSecurityGroup
+      IamInstanceProfile:
+        Ref: ThumborInstanceProfile
       UserData:
         "Fn::Base64":
           !Sub |
             #!/bin/bash -xe
-            /usr/local/bin/aws s3 cp s3://ecom-api-secrets/thumbor.conf /etc/thumbor.conf
+            sed -i 's/__AWS_REGION__/${AWS::Region}/' /etc/thumbor.conf
+            sed -i 's/__IMAGE_BUCKET__/${ImageBucket}/' /etc/thumbor.conf
+            systemctl restart thumbor.service
   ThumborASG:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
@@ -47,7 +96,7 @@ Resources:
       LaunchConfigurationName:
         Ref: ThumborLaunchConfig
       VPCZoneIdentifier:
-        Ref: PrivateSubnets
+        Ref: ThumborSubnets
       TargetGroupARNs:
         - Ref: ALBTargetGroup
       Tags:
@@ -71,9 +120,9 @@ Resources:
     Properties:
       Scheme: internet-facing
       Subnets:
-        Ref: PublicSubnets
+        Ref: ALBSubnets
       SecurityGroups:
-        - sg-64d66e02 # Public ELB Group
+        - Ref: ALBSecurityGroup
   ALBTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
@@ -85,26 +134,26 @@ Resources:
       Protocol: HTTP
       VpcId:
         Ref: VPC
-  CDN:
-    Type: "AWS::CloudFront::Distribution"
-    Properties:
-      DistributionConfig:
-        Aliases:
-          - img.granoshop.fi
-        Enabled: yes
-        Origins:
-        - DomainName: !GetAtt ApplicationLoadBalancer.DNSName
-          Id: thumbor
-          CustomOriginConfig:
-            HTTPPort: '80'
-            HTTPSPort: '443'
-            OriginProtocolPolicy: http-only
-        DefaultCacheBehavior:
-          TargetOriginId: thumbor
-          DefaultTTL: 15552000
-          SmoothStreaming: 'false'
-          ForwardedValues:
-            QueryString: 'false'
-            Cookies:
-              Forward: none
-          ViewerProtocolPolicy: allow-all
+  # CDN:
+  #   Type: "AWS::CloudFront::Distribution"
+  #   Properties:
+  #     DistributionConfig:
+  #       Aliases:
+  #         - img.granoshop.fi
+  #       Enabled: yes
+  #       Origins:
+  #       - DomainName: !GetAtt ApplicationLoadBalancer.DNSName
+  #         Id: thumbor
+  #         CustomOriginConfig:
+  #           HTTPPort: '80'
+  #           HTTPSPort: '443'
+  #           OriginProtocolPolicy: http-only
+  #       DefaultCacheBehavior:
+  #         TargetOriginId: thumbor
+  #         DefaultTTL: 15552000
+  #         SmoothStreaming: 'false'
+  #         ForwardedValues:
+  #           QueryString: 'false'
+  #           Cookies:
+  #             Forward: none
+  #         ViewerProtocolPolicy: allow-all
