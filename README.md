@@ -1,5 +1,6 @@
-# thumbor
+# thumbor aws example
 
+![thumbor](http://i.imgur.com/X7GxWQH.png)
 
 ## create stack
 
@@ -8,15 +9,6 @@
 ## update stack
 
 `aws cloudformation update-stack --stack-name thumbor --template-body=file://thumbor.cloudformation.yml`
-
-## upload config to s3
-
-```
-aws s3 cp thumbor.conf s3://ecom-api-secrets/thumbor.conf --sse
-```
-
-Please don't commit thumbor.conf with THUMBOR_SECURITY_KEY!
-
 
 ## generate hashed urls
 

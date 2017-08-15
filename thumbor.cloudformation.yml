@@ -5,10 +5,10 @@ Parameters:
     Default: grano-ecomm
   ThumborSubnets:
     Type: CommaDelimitedList
-    # Default: subnet-ceb1e1aa,subnet-10d99166
+    Default: subnet-ceb1e1aa,subnet-10d99166
   ALBSubnets:
     Type: CommaDelimitedList
-    # Default: subnet-c9b1e1ad,subnet-11d99167
+    Default: subnet-c9b1e1ad,subnet-11d99167
   MinSize:
     Type: Number
     Default: 1
@@ -17,13 +17,15 @@ Parameters:
     Default: 2
   VPC:
     Type: String
-    # Default: vpc-d01b60b4
+    Default: vpc-d01b60b4
   AMIID:
     Type: String
+    Default: ami-ad732dcb
 Resources:
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
+      GroupDescription: allow access to ALB from internet
       VpcId:
         Ref: VPC
       SecurityGroupIngress:
@@ -34,6 +36,7 @@ Resources:
   ThumborSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
+      GroupDescription: allow access to thumbor from ALB
       VpcId:
         Ref: VPC
       SecurityGroupIngress:
@@ -47,6 +50,16 @@ Resources:
   ThumborRole:
     Type: "AWS::IAM::Role"
     Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
       Policies:
         -
           PolicyName: "allow-image-bucket"
