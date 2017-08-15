@@ -52,3 +52,8 @@ Replace `BUCKET` with the actual bucket that you got from the command above.
 
 Note the optional query parameter. This is for running a [JMESPath](http://jmespath.org) query against the returned JSON output.
 This can be used to implement very powerful things in scripts.
+
+
+## Acknowledgements
+
+Thanks go out to [Grano](https://www.grano.fi/) for sharing the original template.
