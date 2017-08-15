@@ -1,8 +1,14 @@
-# thumbor aws example
+# Thumbor AWS Example
 
-This template will setup Thumbor on an EC2 Auto Scaling Group and create an S3 bucket for source images.
+This repo includes a template to setup [Thumbor](http://thumbor.org) on an EC2 Auto Scaling Group and create an S3 bucket for source images.
 
-![thumbor](http://i.imgur.com/X7GxWQH.png)
+Note that this setup isn't secure! Unless url parameter hashing is used Thumbor is susceptible to denial of service attack by simply
+requesting images with arbitrary sizes. Set `ALLOW_UNSAFE_URL` to `False` and change `SECURITY_KEY` in `thumbor.conf`.
+See [Thumbor documentation](http://thumbor.readthedocs.io/en/latest/security.html) for more details.
+
+Also it's recommended to use a CDN (CloudFront) to cache the images and ensure high speed delivery. This repo will get to that later.
+
+![thumbor](http://i.imgur.com/hQnTR9r.png)
 
 ## EC2
 
