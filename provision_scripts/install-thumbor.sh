@@ -19,7 +19,7 @@ libwebp-dev \
 webp \
 gifsicle
 
-sudo -H pip install thumbor tc_aws
+sudo -H pip install thumbor tc_aws botocore==1.3.7
 
 sudo useradd thumbor
 

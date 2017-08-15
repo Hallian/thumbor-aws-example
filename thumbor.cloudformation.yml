@@ -2,13 +2,13 @@
 Parameters:
   KeyName:
     Type: String
-    Default: grano-ecomm
+    Default: nikolas
   ThumborSubnets:
     Type: CommaDelimitedList
-    Default: subnet-ceb1e1aa,subnet-10d99166
+    Default: subnet-063c705f, subnet-bd6155ca, subnet-fb2c209e
   ALBSubnets:
     Type: CommaDelimitedList
-    Default: subnet-c9b1e1ad,subnet-11d99167
+    Default: subnet-063c705f, subnet-bd6155ca, subnet-fb2c209e
   MinSize:
     Type: Number
     Default: 1
@@ -17,10 +17,10 @@ Parameters:
     Default: 2
   VPC:
     Type: String
-    Default: vpc-d01b60b4
+    Default: vpc-ff84de9a
   AMIID:
     Type: String
-    Default: ami-ad732dcb
+    Default: ami-6d30c214
 Resources:
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -45,6 +45,10 @@ Resources:
         ToPort: '8888'
         SourceSecurityGroupId:
           Ref: ALBSecurityGroup
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: 0.0.0.0/0
   ImageBucket:
     Type: "AWS::S3::Bucket"
   ThumborRole:
@@ -69,9 +73,7 @@ Resources:
               -
                 Effect: "Allow"
                 Action: "s3:*"
-                Resource:
-                  !Sub |
-                    arn:aws:s3:::${ImageBucket}
+                Resource: !Sub arn:aws:s3:::${ImageBucket}/*
   ThumborInstanceProfile:
     Type: "AWS::IAM::InstanceProfile"
     Properties:
