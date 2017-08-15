@@ -172,3 +172,10 @@ Resources:
   #           Cookies:
   #             Forward: none
   #         ViewerProtocolPolicy: allow-all
+Outputs:
+  ThumborUrl:
+    Description: Thumbor URL
+    Value: !GetAtt ApplicationLoadBalancer.DNSName
+  ImageBucket:
+    Description: S3 Bucket for source images
+    Value: !Ref ImageBucket
