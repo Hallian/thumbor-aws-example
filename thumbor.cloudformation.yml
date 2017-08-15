@@ -20,7 +20,7 @@ Parameters:
     Default: vpc-ff84de9a
   AMIID:
     Type: String
-    Default: ami-6d30c214
+    Default: ami-e735c79e
 Resources:
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
