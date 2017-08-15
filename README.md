@@ -1,12 +1,25 @@
 # thumbor aws example
 
+This template will setup Thumbor on an EC2 Auto Scaling Group and create an S3 bucket for source images.
+
 ![thumbor](http://i.imgur.com/X7GxWQH.png)
 
-## Creating an AMI
+## EC2
 
 Amazon Machine Image is a virtual machine image used to start up new EC2 instances.
 
-`packer build thumbor.packer.json`
+### Creating an AMI
+
+AMIs are created by starting up an instance, installing a bunch of software on it and then creating a "snapshot" of it's
+disk. The next time you start up an instance from that AMI all of the software you installed will be there!
+
+We'll use [Packer](https://www.packer.io/) to create our AMI in an automated fashion. It will spin up an instance in AWS,
+run our provisioning scripts (the scripts will install the software we want), stop the instance and package it into an AMI.
+All with a single command. Nifty.
+
+```
+packer build thumbor.packer.json
+```
 
 ## CloudFormation
 
@@ -57,3 +70,5 @@ This can be used to implement very powerful things in scripts.
 ## Acknowledgements
 
 Thanks go out to [Grano](https://www.grano.fi/) for sharing the original template.
+
+Author Nikolas Lahtinen
