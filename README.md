@@ -12,7 +12,12 @@ Also it's recommended to use a CDN (CloudFront) to cache the images and ensure h
 
 ## EC2
 
-Amazon Machine Image is a virtual machine image used to start up new EC2 instances.
+The EC2 service is used for running virtual machines in AWS. We're gonna run our Thumbor on an EC2 instance. For this
+we're going to need an AMI that has Thumbor preinstalled. We could simply install Thumbor during boot but that would slow
+down boot times and make new instances less reliable since something could go wrong during provisioning (a required 
+package repository might be offline for example). 
+
+An Amazon Machine Image is a virtual machine image used to start up new EC2 instances.
 
 ### Creating an AMI
 
