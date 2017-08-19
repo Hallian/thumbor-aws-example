@@ -49,7 +49,7 @@ With custom parameters
 
 ```
 aws cloudformation create-stack \
-	--stack-name thumbor3 \
+	--stack-name thumbor \
 	--template-body=file://thumbor.cloudformation.yml \
 	--capabilities CAPABILITY_IAM \
 	--parameters \
