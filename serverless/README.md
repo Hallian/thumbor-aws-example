@@ -29,3 +29,12 @@ serverless deploy function -f handler
 # OR
 npm run deploy:f
 ```
+
+## Test
+
+```
+serverless info
+# OR
+npm run info
+curl -s https://API_GATEWAY_ID.execute-api.eu-west-1.amazonaws.com/dev/urls/trump.jpg
+```
