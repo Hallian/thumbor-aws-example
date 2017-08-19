@@ -2,6 +2,12 @@
 
 A Lambda function example for hashing Thumbor urls.
 
+## Getting started
+
+```
+npm install
+```
+
 ## Configure
 
 ```

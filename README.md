@@ -74,6 +74,19 @@ aws cloudformation update-stack \
 	--parameters ParameterKey=SecurityKey,ParameterValue=UpdatedSecurityKey
 ```
 
+## Set up Thumbor url hasher Lambda
+
+```
+cd serverless
+npm install
+cp src/config.json.example src/config.json
+npm run deploy
+```
+
+You must edit `src/config.json` with your thumbor url and security key before deploying. You can obtain your thumbor url
+from the stack outputs with the command described in the **Test** section.
+See `serverless/README.md` for more info.
+
 ## Test
 
 The template defines our Thumbor load balancer url and newly created image bucket as outputs. You can obtain stack outputs
@@ -90,6 +103,10 @@ Replace `BUCKET` with the actual bucket that you got from the command above.
 
 Note the optional query parameter. This is for running a [JMESPath](http://jmespath.org) query against the returned JSON output.
 This can be used to implement very powerful things in scripts.
+
+### Unsafe urls
+
+DEPRECATED. Unsafe urls are no longer supported due to url hasher lambda being implemented.
 
 With your `ThumborUrl` at hand you can try fetching our image from Thumbor.
 
