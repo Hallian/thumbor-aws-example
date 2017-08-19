@@ -36,11 +36,25 @@ ahead and use the carets on the left to collapse the YAML blocks so only the top
 
 ### Create stack
 
+With default parameters
+
 ```
 aws cloudformation create-stack \
 	--stack-name thumbor \
 	--template-body=file://thumbor.cloudformation.yml \
 	--capabilities CAPABILITY_IAM
+```
+
+With custom parameters
+
+```
+aws cloudformation create-stack \
+	--stack-name thumbor3 \
+	--template-body=file://thumbor.cloudformation.yml \
+	--capabilities CAPABILITY_IAM \
+	--parameters \
+	ParameterKey=SecurityKey,ParameterValue=MySecureKey \
+	ParameterKey=AMIID,ParameterValue=ami-xxxxxxxx
 ```
 
 `--capabilities CAPABILITY_IAM` flag is used to acknowledge the creation of IAM (Identity and Access Management) resouces.
@@ -57,7 +71,7 @@ aws cloudformation update-stack \
 	--stack-name thumbor \
 	--template-body=file://thumbor.cloudformation.yml \
 	--capabilities CAPABILITY_IAM \
-	--parameters ParameterKey=SecurityKey,ParameterValue=MySecureKey
+	--parameters ParameterKey=SecurityKey,ParameterValue=UpdatedSecurityKey
 ```
 
 ## Test
