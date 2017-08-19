@@ -6,7 +6,9 @@ export function hasher(event, context, callback) {
   const image = () => new Thumbor(Config.SecurityKey, Config.ThumborUrl).setImagePath(img);
 
   const sizes = {
-    '50x50': image().crop(30, 30, 60, 60).resize(50, 50).buildUrl(),
+    'original': image().buildUrl(),
+    'cropped': image().crop(1080, 200, 2840, 2320).buildUrl(),
+    'cropped300x0': image().crop(1080, 200, 2840, 2320).resize(300, 0).buildUrl(),
     '300x0': image().resize(300, 0).buildUrl()
   };
 
