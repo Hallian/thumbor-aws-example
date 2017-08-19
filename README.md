@@ -2,11 +2,7 @@
 
 This repo includes a template to setup [Thumbor](http://thumbor.org) on an EC2 Auto Scaling Group and create an S3 bucket for source images.
 
-Note that this setup isn't secure! Unless url parameter hashing is used Thumbor is susceptible to denial of service attack by simply
-requesting images with arbitrary sizes. Set `ALLOW_UNSAFE_URL` to `False` and change `SECURITY_KEY` in `thumbor.conf`.
-See [Thumbor documentation](http://thumbor.readthedocs.io/en/latest/security.html) for more details.
-
-Also it's recommended to use a CDN (CloudFront) to cache the images and ensure high speed delivery. This repo will get to that later.
+It's recommended to use a CDN (CloudFront) to cache the images and ensure high speed delivery. This repo will get to that later.
 
 ![thumbor](http://i.imgur.com/hQnTR9r.png)
 
@@ -51,13 +47,17 @@ aws cloudformation create-stack \
 **Never create stacks with this flag from templates that you haven't reviewed! This could be used
 to compromise your entire AWS account!**
 
+`--parameters ParameterKey=SecurityKey,ParameterValue=MySecureKey` can be used to change the security key.
+See [Thumbor documentation](http://thumbor.readthedocs.io/en/latest/security.html) for more details.
+
 ### Update stack
 
 ```
 aws cloudformation update-stack \
 	--stack-name thumbor \
 	--template-body=file://thumbor.cloudformation.yml \
-	--capabilities CAPABILITY_IAM
+	--capabilities CAPABILITY_IAM \
+	--parameters ParameterKey=SecurityKey,ParameterValue=MySecureKey
 ```
 
 ## Test

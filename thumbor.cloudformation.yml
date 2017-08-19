@@ -20,7 +20,11 @@ Parameters:
     Default: vpc-ff84de9a
   AMIID:
     Type: String
-    Default: ami-e735c79e
+    Default: ami-3f2ed246
+  SecurityKey:
+    Type: String
+    Default: 'MY_SECURE_KEY'
+    NoEcho: true
 Resources:
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -98,6 +102,7 @@ Resources:
             #!/bin/bash -xe
             sed -i 's/__AWS_REGION__/${AWS::Region}/' /etc/thumbor.conf
             sed -i 's/__IMAGE_BUCKET__/${ImageBucket}/' /etc/thumbor.conf
+            sed -i 's/__SECURITY_KEY__/${SecurityKey}/' /etc/thumbor.conf
             systemctl restart thumbor.service
   ThumborASG:
     Type: AWS::AutoScaling::AutoScalingGroup
