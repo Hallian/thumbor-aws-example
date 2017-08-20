@@ -16,10 +16,12 @@ functions:
 
 plugins:
   - serverless-webpack
-  - serverless-domain-manager
+#   - serverless-domain-manager
 
-custom:
-  customDomain:
-    basePath: "urls"
-    domainName: hasher.phz.cloud
-    stage: dev
+# custom:
+#   customDomain:
+#     basePath: "urls"
+#     domainName: hasher.example.com
+#     stage: dev
+
+# To use custom domain you must first set one up in AWS Api Gateway
