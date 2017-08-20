@@ -25,9 +25,6 @@ Parameters:
     Type: String
     Default: 'MY_SECURE_KEY'
     NoEcho: true
-  HasherUrl:
-    Type: String
-    Default: hasher.example.com
   CDNAlias:
     Type: String
     Default: images.phz.cloud
@@ -174,21 +171,6 @@ Resources:
             HTTPPort: '80'
             HTTPSPort: '443'
             OriginProtocolPolicy: http-only
-        - DomainName: !Ref HasherUrl
-          Id: hasher
-          OriginPath: /dev/urls
-          CustomOriginConfig:
-            HTTPSPort: '443'
-            OriginProtocolPolicy: https-only
-        CacheBehaviors:
-          - TargetOriginId: hasher
-            PathPattern: sizes/*
-            ViewerProtocolPolicy: allow-all
-            DefaultTTL: 60
-            ForwardedValues:
-              QueryString: 'false'
-              Cookies:
-                Forward: none
         DefaultCacheBehavior:
           TargetOriginId: thumbor
           DefaultTTL: 15552000
