@@ -83,7 +83,7 @@ aws cloudformation update-stack \
 ```
 cd serverless
 npm install
-cp src/config.json.example src/config.json
+cp config.json.example config.json
 npm run deploy
 ```
 

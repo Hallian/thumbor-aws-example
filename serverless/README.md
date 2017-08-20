@@ -11,14 +11,14 @@ npm install
 ## Configure
 
 ```
-cp src/config.json.example src/config.json
+cp config.json.example config.json
 ```
 
-Add your Thumbor url and security key to `src/config.json`.
+Add your Thumbor url and security key to `config.json`.
 
 ### Modifying image sizes
 
-You can change image sizes by modifying the `sizes` object of the hasher function in `src/handler.js`.
+You can change image sizes by modifying the `sizes` object of the hasher function in `handler.js`.
 
 ## Deploy
 
@@ -42,5 +42,5 @@ npm run deploy:f
 serverless info
 # OR
 npm run info
-curl -s https://API_GATEWAY_ID.execute-api.eu-west-1.amazonaws.com/dev/urls/trump.jpg
+curl -s https://API_GATEWAY_ID.execute-api.eu-west-1.amazonaws.com/dev/trump.jpg
 ```
