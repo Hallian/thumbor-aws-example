@@ -54,7 +54,11 @@ aws cloudformation create-stack \
 	--capabilities CAPABILITY_IAM \
 	--parameters \
 	ParameterKey=SecurityKey,ParameterValue=MySecureKey \
-	ParameterKey=AMIID,ParameterValue=ami-xxxxxxxx
+	ParameterKey=AMIID,ParameterValue=ami-xxxxxxxx \
+	ParameterKey=ThumborSubnets,ParameterValue=subnet-xxxxxxxx \
+	ParameterKey=ALBSubnets,ParameterValue=subnet-xxxxxxxx \
+	ParameterKey=VPC,ParameterValue=vpc-xxxxxxxx \
+	ParameterKey=KeyName,ParameterValue=ssh-key-name
 ```
 
 `--capabilities CAPABILITY_IAM` flag is used to acknowledge the creation of IAM (Identity and Access Management) resouces.
