@@ -8,7 +8,7 @@ provider:
 
 functions:
   hasher:
-    handler: src/handler.hasher
+    handler: handler.hasher
     events:
       - http:
           path: urls/{image}
