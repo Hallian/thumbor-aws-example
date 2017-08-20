@@ -4,7 +4,7 @@ This repo includes a template to setup [Thumbor](http://thumbor.org) on an EC2 A
 
 It's recommended to use a CDN (CloudFront) to cache the images and ensure high speed delivery. This repo will get to that later.
 
-![thumbor](http://i.imgur.com/BKpS3en.png)
+![thumbor](http://i.imgur.com/Z5WzZes.png)
 
 ## EC2
 
