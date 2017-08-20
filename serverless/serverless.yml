@@ -11,8 +11,15 @@ functions:
     handler: handler.hasher
     events:
       - http:
-          path: urls/{image}
+          path: /{image}
           method: get
 
 plugins:
   - serverless-webpack
+  - serverless-domain-manager
+
+custom:
+  customDomain:
+    basePath: "urls"
+    domainName: hasher.phz.cloud
+    stage: dev
