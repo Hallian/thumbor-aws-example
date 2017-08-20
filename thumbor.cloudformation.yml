@@ -154,10 +154,36 @@ Resources:
       Protocol: HTTP
       VpcId:
         Ref: VPC
+  CDN:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        # Aliases:
+          # - images.example.com
+        Enabled: yes
+        Origins:
+        - DomainName: !GetAtt ApplicationLoadBalancer.DNSName
+          Id: thumbor
+          CustomOriginConfig:
+            HTTPPort: '80'
+            HTTPSPort: '80'
+            OriginProtocolPolicy: http-only
+        DefaultCacheBehavior:
+          TargetOriginId: thumbor
+          DefaultTTL: 15552000
+          SmoothStreaming: 'false'
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: allow-all
 Outputs:
-  ThumborUrl:
+  DirectThumborUrl:
     Description: Thumbor URL
     Value: !GetAtt ApplicationLoadBalancer.DNSName
+  CDNThumborUrl:
+    Description: Thumbor URL
+    Value: !GetAtt CDN.DomainName
   ImageBucket:
     Description: S3 Bucket for source images
     Value: !Ref ImageBucket
