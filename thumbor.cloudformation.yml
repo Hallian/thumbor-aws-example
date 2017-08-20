@@ -28,6 +28,9 @@ Parameters:
   HasherUrl:
     Type: String
     Default: hasher.example.com
+  CDNAlias:
+    Type: String
+    Default: images.phz.cloud
 Resources:
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -162,7 +165,7 @@ Resources:
     Properties:
       DistributionConfig:
         Aliases:
-          - images.phz.cloud
+          - !Ref CDNAlias
         Enabled: yes
         Origins:
         - DomainName: !GetAtt ApplicationLoadBalancer.DNSName
