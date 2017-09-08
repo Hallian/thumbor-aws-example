@@ -20,7 +20,7 @@ Parameters:
     Default: vpc-ff84de9a
   AMIID:
     Type: String
-    Default: ami-3f2ed246
+    Default: ami-0541bd7c
   SecurityKey:
     Type: String
     Default: 'MY_SECURE_KEY'
